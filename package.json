@@ -1,0 +1,27 @@
+{
+  "name": "typescript-exercises",
+  "version": "1.0.0",
+  "description": "��#\u0000 \u0000t\u0000y\u0000p\u0000e\u0000s\u0000c\u0000r\u0000i\u0000p\u0000t\u0000-\u0000e\u0000x\u0000e\u0000r\u0000c\u0000i\u0000s\u0000e\u0000s\u0000\r\u0000 \u0000",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/MNATorres/typescript-exercises.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/MNATorres/typescript-exercises/issues"
+  },
+  "homepage": "https://github.com/MNATorres/typescript-exercises#readme",
+  "dependencies": {
+    "express": "^5.2.1"
+  },
+  "devDependencies": {
+    "@types/express": "^5.0.6"
+  }
+}
