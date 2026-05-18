@@ -12,7 +12,7 @@ app.use(express.json());
 async function bootstrap() {
   try {
     await testDatabaseConnection();
-    console.log('📁 Database connection successfully established.');
+    console.log("📁 Database connection successfully established.");
 
     // Aquí acoplaremos las rutas globales una vez que la DB esté lista
     app.use("/api", apiRouter);

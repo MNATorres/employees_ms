@@ -59,9 +59,11 @@ Following the principles of Clean Architecture and Separation of Concerns:
 ## 🚀 Getting Started
 
 ### 1. Prerequisites
+
 Ensure you have Node.js (v18+ recommended) and Docker / Docker Compose installed on your system.
 
 ### 2. Environment Setup
+
 Clone the repository, navigate to the root directory, and install the dependencies:
 
 ```bash
@@ -69,16 +71,19 @@ npm install
 ```
 
 ### 3. Spin up the Infrastructure
+
 Launch the MySQL database and phpMyAdmin containers detached in the background:
 
 ```bash
 docker compose up -d
 ```
+
 - **Database Port:** `3306`
 - **phpMyAdmin GUI:** Accessible via your browser at [http://localhost:8080](http://localhost:8080)
-  *(Credentials -> User: `root`, Password: `password`, Server: `db`)*
+  _(Credentials -> User: `root`, Password: `password`, Server: `db`)_
 
 ### 4. Run the Application
+
 Start the development server with hot-reloading enabled:
 
 ```bash
