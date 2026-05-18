@@ -1,12 +1,27 @@
-import * as employeesRepo from "../respository/employees.repository.js";
+import { employeesRepo } from "../respository/employees.repository.js";
+import type { Employee } from "../types/entities.type.js";
 
-const getAllEmployees = async () => {
-  const repositoryData = await employeesRepo.getAllEmployees();
+interface ServiceResponse {
+  message: string;
+  data: Employee[];
+}
+
+const getAllEmployees = async (): Promise<ServiceResponse> => {
+  const result = await employeesRepo.findAll();
 
   return {
     message: "Respuesta generada desde el servicio de empleados",
-    data: repositoryData,
+    data: result,
   };
 };
 
-export { getAllEmployees };
+const findByGender = async (gender: "M" | "F"): Promise<ServiceResponse> => {
+  const result = await employeesRepo.findByGender(gender);
+
+  return {
+    message: `Response for ${gender} from employes.service`,
+    data: result,
+  };
+};
+
+export { getAllEmployees, findByGender };
