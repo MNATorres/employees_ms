@@ -7,11 +7,10 @@ export abstract class BaseRepository<T> {
   ) {}
 
   async findAll(): Promise<T[]> {
-    const [rows] = await this.pool.query<
-      Record<string, any>[] & RowDataPacket[]
-    >(`SELECT * FROM ${this.tableName}`);
-
-    return rows as T[];
+    const [rows] = await this.pool.query<(T & RowDataPacket)[]>(
+      `SELECT * FROM ${this.tableName}`,
+    );
+    return rows;
   }
 
   async findById(
