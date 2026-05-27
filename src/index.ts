@@ -3,6 +3,7 @@ import express from "express";
 import { testDatabaseConnection } from "./config/database.js";
 import { ENV } from "./config/env.js";
 import { apiRouter } from "./routes/index.js";
+import { listenToDepartmentsQueue } from "./config/queueConsumer.js";
 
 const app = express();
 const PORT = ENV.PORT;
@@ -17,6 +18,8 @@ async function bootstrap() {
   try {
     await testDatabaseConnection();
     console.log("📁 Database connection successfully established.");
+
+    await listenToDepartmentsQueue();
 
     // Aquí acoplaremos las rutas globales una vez que la DB esté lista
     app.use("/api", apiRouter);
