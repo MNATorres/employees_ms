@@ -1,99 +1,177 @@
-# Senior Node.js & TypeScript Architectural Challenge
+# 👥 Employees Microservice (employes_ms)
 
-A production-grade, highly strict backend environment built with Node.js, Express, and MySQL (Dockerized). This repository serves as a practical sandbox to master advanced TypeScript type mechanics, runtime boundary safety, and **SOLID** architectural patterns required for high-throughput, resilient distributed systems.
+<p align="center">
+  <img src="https://img.shields.io/badge/node.js-v20+-8CC84B?style=for-the-badge&logo=node.js&logoColor=white" alt="Node.js" />
+  <img src="https://img.shields.io/badge/typescript-v6+-3178C6?style=for-the-badge&logo=typescript&logoColor=white" alt="TypeScript" />
+  <img src="https://img.shields.io/badge/express-v5--beta-000000?style=for-the-badge&logo=express&logoColor=white" alt="Express" />
+  <img src="https://img.shields.io/badge/mysql2-v3+-4479A1?style=for-the-badge&logo=mysql&logoColor=white" alt="MySQL" />
+  <img src="https://img.shields.io/badge/rabbitmq-v3.x-FF6600?style=for-the-badge&logo=rabbitmq&logoColor=white" alt="RabbitMQ" />
+  <img src="https://img.shields.io/badge/zod-v4+-3068B2?style=for-the-badge&logo=zod&logoColor=white" alt="Zod" />
+</p>
 
-## 🎯 The Mission
+---
 
-The goal of this challenge is to move away from basic type annotations and build an enterprise-ready API boilerplate where **type safety is strictly enforced at every systemic boundary** (Database, HTTP Requests, and Internal Services) without introducing redundant or unreadable code.
+## 📌 Overview
+
+This repository is a production-grade, highly strict backend environment built with **Node.js**, **Express 5**, **TypeScript 6**, and **MySQL 8**. It serves as an architectural sandbox to master advanced TypeScript mechanics, runtime boundary safety, **SOLID** design principles, and asynchronous data synchronization using **RabbitMQ**.
 
 ### Core Objectives
+*   **Zero `any` Policy:** Leverages `unknown`, Generics, and Type Predicates to handle dynamic data securely.
+*   **Database Type Synchronization:** Implements a robust Data Access Layer using Advanced Generics (`<T>`) to guarantee compile-time safety on raw database queries.
+*   **Decoupled Caching (New Feature):** Integrates with a RabbitMQ queue listener that consumes department events and updates a local cached departments table to achieve eventual consistency.
+*   **Request & Input Hardening:** Secures the HTTP boundary by strongly typing Express payloads (`req.body`, `req.params`) and validating variables via schemas.
+*   **SOLID & Clean Architecture:** Decouples the HTTP routing layer (Express), business logic (Services), and infrastructure layer (MySQL/Docker).
 
-- **Zero `any` Policy:** Leverage `unknown`, Generics, and Type Predicates to handle dynamic data securely.
-- **Database Type Synchronization:** Implement a robust Data Access Layer using Advanced Generics (`<T>`) to guarantee compile-time safety on raw or repository-driven database queries.
-- **Request & Input Hardening:** Secure the HTTP boundary by strongly typing Express payloads (`req.body`, `req.params`) and implementing runtime validation.
-- **SOLID & Clean Architecture:** Enforce strict decoupling between the HTTP layer (Express), the business logic (Services), and the infrastructure layer (MySQL/Docker).
+---
+
+## 🔗 Connected Repositories
+
+This microservice works in cooperation with other services in the ecosystem. Ensure you have them running locally for full feature testing:
+
+*   **API Gateway:** [employees_api_gateway](https://github.com/MNATorres/employees_api_gateway.git)
+*   **Departments Microservice:** [departments_ms](https://github.com/MNATorres/departments_ms.git)
+*   **Employees Microservice (This repo):** [typescript-exercises (employeesms)](https://github.com/MNATorres/typescript-exercises.git)
 
 ---
 
 ## 🛠️ Tech Stack & Infrastructure
 
-- **Runtime & Framework:** Node.js, Express, TypeScript (Strict Mode).
-- **Database & Tools:** MySQL 8.0, phpMyAdmin (Database Management).
-- **Containerization:** Docker & Docker Compose for immutable environment replication.
-- **Development Utilities:** `tsx` (Watch mode/execution), `tsconfig` production-hardened flags.
+*   **Runtime & Framework:** Node.js, Express, TypeScript (Strict Mode).
+*   **Database & Tools:** MySQL 8.0, phpMyAdmin (Database Management).
+*   **Messaging Broker client:** `amqplib` (Node.js RabbitMQ client).
+*   **Containerization:** Docker & Docker Compose for immutable environment replication.
+*   **Development Utilities:** `tsx` (Watch mode/execution), `tsconfig` production-hardened flags.
 
 ---
 
 ## ⚙️ Hardened TypeScript Configuration
 
 To simulate a real-world enterprise production environment, the compiler is configured with maximum strictness:
-
-- `strict: true` — Enables all strict type-checking options.
-- `noUncheckedIndexedAccess: true` — Forces explicit handling of potential `undefined` values when accessing arrays or lookup objects, eliminating the #1 runtime crash vector in production.
-- `exactOptionalPropertyTypes: true` — Strictly differentiates between a missing property and a property explicitly passed as `undefined`.
+*   `strict: true` — Enables all strict type-checking options.
+*   `noUncheckedIndexedAccess: true` — Forces explicit handling of potential `undefined` values when accessing arrays or lookup objects, eliminating the #1 runtime crash vector in production.
+*   `exactOptionalPropertyTypes: true` — Strictly differentiates between a missing property and a property explicitly passed as `undefined`.
 
 ---
 
 ## 📁 Project Structure
 
-Following the principles of Clean Architecture and Separation of Concerns:
-
 ```text
+employes_ms/
 ├── src/
 │   ├── config/
-│   │   └── database.ts    # MySQL connection pooling & lifecycle management
-│   ├── controllers/       # Strongly-typed Express controllers (HTTP layer)
+│   │   ├── database.ts        # MySQL connection pooling & lifecycle management
+│   │   ├── env.ts             # Environment variables validation with Zod
+│   │   └── queueConsumer.ts   # RabbitMQ event consumer listener (DEPARTMENT_CREATED)
+│   ├── controllers/           # Strongly-typed Express controllers (HTTP layer)
 │   ├── database/
-│   │   └── repository.ts  # Advanced Generic Repositories (Data Access Layer)
-│   ├── routes/            # API Route definitions mapping to controllers
+│   │   └── repository.ts      # Advanced Generic Repositories (Data Access Layer)
+│   ├── routes/                # API Route definitions mapping to controllers
 │   ├── types/
-│   │   └── entities.ts    # Core domain entities and data-transfer types
-│   └── index.ts           # Application entry-point
-├── docker-compose.yml     # Multi-container local environment orchestration
+│   │   └── entities.ts        # Core domain entities and data-transfer types
+│   └── index.ts               # Application bootstrap entry-point
+├── docker/                    # MySQL schema initialization files
+├── docker-compose.yml         # MySQL and phpMyAdmin containers
 ├── package.json
-└── tsconfig.json          # Production-ready compiler rules
+└── tsconfig.json              # Production-ready compiler rules
 ```
 
 ---
 
-## 🚀 Getting Started
+## 🐇 RabbitMQ Queue Consumer (New Feature)
+
+To maintain loose-coupling between the microservices, this service does not make synchronous calls to the Departments Microservice database. Instead, it maintains a read-only table called `departments_cache` and listens to real-time updates broadcast over **RabbitMQ**.
+
+### Event Processing Flow:
+1.  **Background Listener (`queueConsumer.ts`):** On startup, the service establishes a permanent connection to `amqp://guest:guest@localhost:5672` and asserts the queue `departments_events`.
+2.  **Consuming Events:** When a new message arrives with the event name `DEPARTMENT_CREATED`, it parses the department data (`dept_no`, `dept_name`).
+3.  **Local Database Synchronization:** It executes an upsert query to update `departments_cache` safely:
+    ```sql
+    INSERT INTO departments_cache (dept_no, dept_name) 
+    VALUES (?, ?) 
+    ON DUPLICATE KEY UPDATE dept_name = ?
+    ```
+4.  **Message Acknowledgement (`ack`):** Upon successful database write, it sends a positive acknowledgement (`channel.ack(msg)`) to RabbitMQ. If the write fails, the message remains in the queue (or is re-queued) so no data is lost.
+
+---
+
+## 🚦 API Endpoints
+
+All application routes are prefixed with `/api`.
+
+### 🩺 Health Checks
+*   **`GET /`**
+    *   **Description:** Basic greeting check.
+    *   **Response:** `200 OK`
+*   **`GET /api/health`**
+    *   **Description:** Active service health status.
+    *   **Response:** `200 OK`
+
+### 👥 Employees Management
+*   **`GET /api/employees`**
+    *   **Description:** Retrieves all registered employees.
+    *   **Response:** `200 OK`
+*   **`POST /api/employees/by-gender`**
+    *   **Description:** Filter employees by gender.
+    *   **Request Body:**
+        ```json
+        {
+          "gender": "M" // or "F"
+        }
+        ```
+    *   **Response:** `200 OK`
+
+---
+
+## 🚀 Getting Started & Local Testing
+
+To test the microservices flow locally, **all three repositories and their respective databases/brokers must be running concurrently.**
 
 ### 1. Prerequisites
+Ensure you have **Node.js** (v20+ recommended) and **Docker / Docker Compose** installed.
 
-Ensure you have Node.js (v18+ recommended) and Docker / Docker Compose installed on your system.
+### 2. Spin up the Infrastructure
+Launch the MySQL database and phpMyAdmin containers in the background:
+1.  **In this project folder (`employes_ms`):** Start the Employees MySQL database (running on port `3306`) and phpMyAdmin (on `8080`):
+    ```bash
+    docker compose up -d
+    ```
+    *phpMyAdmin is accessible at [http://localhost:8080](http://localhost:8080)*
+2.  **In the `api_gateway` folder:** Start the RabbitMQ broker:
+    ```bash
+    docker compose up -d
+    ```
+3.  **In the `departments_ms` folder:** Start the Departments MySQL database (running on port `3307`) and phpMyAdmin (on `8082`):
+    ```bash
+    docker compose up -d
+    ```
 
-### 2. Environment Setup
-
-Clone the repository, navigate to the root directory, and install the dependencies:
-
-```bash
-npm install
+### 3. Environment Setup
+Create a `.env` file in the root directory (or edit the existing one):
+```env
+PORT=3000
+DB_HOST=localhost
+DB_PORT=3306
+DB_USER=root
+DB_PASSWORD=password
+DB_DATABASE=employees
 ```
-
-### 3. Spin up the Infrastructure
-
-Launch the MySQL database and phpMyAdmin containers detached in the background:
-
-```bash
-docker compose up -d
-```
-
-- **Database Port:** `3306`
-- **phpMyAdmin GUI:** Accessible via your browser at [http://localhost:8080](http://localhost:8080)
-  _(Credentials -> User: `root`, Password: `password`, Server: `db`)_
 
 ### 4. Run the Application
-
-Start the development server with hot-reloading enabled:
-
+Install dependencies and start the development server with hot-reloading:
 ```bash
+npm install
 npm run dev
 ```
 
+On startup, you should see the following logs confirming successful connections:
+```text
+🐇 [Subscriber] Listening permanently to RabbitMQ queue: departments_events
+🚀 Server running on port 3000
+```
+
+To test, trigger a department creation in `departments_ms` and inspect the logs of this service to verify that the message is consumed and the database cache is updated!
+
 ---
 
-## 🎓 Learning Pillars & Roadmap
-
-- **Phase 1: Generic Data Repositories** — Crafting single, abstract classes that safely handle multiple database entities mapping parameter types to query results.
-- **Phase 2: Request Payload Hardening** — Overriding default Express types to ensure untrusted user inputs match expected system shapes before hitting business logic.
-- **Phase 3: Dependency Inversion (SOLID)** — Building decoupled contracts (interfaces) so services never depend directly on infrastructure components.
+## 📄 License
+This project is licensed under the **ISC License**. Developed for modern microservices practice.
