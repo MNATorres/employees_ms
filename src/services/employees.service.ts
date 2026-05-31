@@ -24,4 +24,12 @@ const findByGender = async (gender: "M" | "F"): Promise<ServiceResponse> => {
   };
 };
 
-export { getAllEmployees, findByGender };
+const generateReport = async (): Promise<string> => {
+  return "I am an employees service report";
+};
+
+const getReportById = async (id: number): Promise<string> => {
+  return `I am a report for ${id}`;
+};
+
+export { getAllEmployees, findByGender, generateReport, getReportById };
