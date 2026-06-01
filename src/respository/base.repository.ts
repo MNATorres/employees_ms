@@ -26,4 +26,11 @@ export abstract class BaseRepository<T> {
 
     return result as T;
   }
+
+  async findByAmountOrdered(amount: number): Promise<T[]> {
+    const [rows] = await this.pool.query<(T & RowDataPacket)[]>(
+      `SELECT * FROM ${this.tableName} LIMIT ${amount}`,
+    );
+    return rows;
+  }
 }
